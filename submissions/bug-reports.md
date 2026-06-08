@@ -7,7 +7,7 @@
 
 ---
 
-## BUG-01
+## BUG-01: Entering a wrong password on login displays a wrong error message
 
 | Attribute | Detail |
 |---|---|
@@ -18,8 +18,6 @@
 | **Discovered By** | Hoàng Minh Phúc |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** Entering a wrong password on login displays a wrong error message
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
@@ -46,7 +44,7 @@
 
 ---
 
-## BUG-02
+## BUG-02: Submitting the empty login form only highlights the email field — password field is not flagged; empty password field shows "please enter email and password" and vice versa.
 
 | Attribute | Detail |
 |---|---|
@@ -57,8 +55,6 @@
 | **Discovered By** | Hoàng Minh Phúc |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** Submitting the empty login form only highlights the email field — password field is not flagged; empty password field shows "please enter email and password" and vice versa.
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
@@ -87,7 +83,7 @@
 
 ---
 
-## BUG-03
+## BUG-03: Pressing Enter after typing a search keyword does not trigger the search — manual button click required
 
 | Attribute | Detail |
 |---|---|
@@ -98,8 +94,6 @@
 | **Discovered By** | Trần Xuân Bắc |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** Pressing Enter after typing a search keyword does not trigger the search — manual button click required
 
 **Environment:**
 - Browser: Edge 148.0.3967.70
@@ -127,7 +121,7 @@
 
 ---
 
-## BUG-04
+## BUG-04: When a member with "Suspended" status attempts to borrow, the system shows the "Expired" error message instead of a "Suspended" message
 
 | Attribute | Detail |
 |---|---|
@@ -138,8 +132,6 @@
 | **Discovered By** | Trần Ngọc Hải |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** When a member with "Suspended" status attempts to borrow, the system shows the "Expired" error message instead of a "Suspended" message
 
 **Environment:**
 - Browser: Safari 26.4
@@ -164,7 +156,7 @@
 
 ---
 
-## BUG-05
+## BUG-05: No overdue warning is displayed when a book is returned after its due date
 
 | Attribute | Detail |
 |---|---|
@@ -175,8 +167,6 @@
 | **Discovered By** | Ngô Tuấn Duy |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** No overdue warning is displayed when a book is returned after its due date
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
@@ -202,7 +192,7 @@
 
 ---
 
-## BUG-06
+## BUG-06: Email address without a dot in the domain is accepted when registering a new member and vice versa (emails with dots are not accepted).
 
 | Attribute | Detail |
 |---|---|
@@ -213,8 +203,6 @@
 | **Discovered By** | Trần Ngọc Hải |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** Email address without a dot in the domain is accepted when registering a new member and vice versa (emails with dots are not accepted).
 
 **Environment:**
 - Browser: Safari 26.4
@@ -243,7 +231,7 @@
 
 ---
 
-## BUG-07
+## BUG-07: Members can borrow up to 4 books — borrow limit should be enforced at 3 per SRS
 
 | Attribute | Detail |
 |---|---|
@@ -254,8 +242,6 @@
 | **Discovered By** | Nguyễn Tuấn Khải |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** Members can borrow up to 4 books — borrow limit should be enforced at 3 per SRS
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
@@ -281,7 +267,7 @@
 
 ---
 
-## BUG-08
+## BUG-08: A logged-in member can view the borrow records of other members — no access control enforced
 
 | Attribute | Detail |
 |---|---|
@@ -292,8 +278,6 @@
 | **Discovered By** | Ngô Tuấn Duy |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** A logged-in member can view the borrow records of other members — no access control enforced
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
@@ -319,7 +303,7 @@
 
 ---
 
-## BUG-09
+## BUG-09: A member can process the return of a book that was borrowed by a different member
 
 | Attribute | Detail |
 |---|---|
@@ -330,8 +314,6 @@
 | **Discovered By** | Trần Xuân Bắc |
 | **Date Discovered** | 18/05/2026 |
 | **Status** | Open |
-
-**Title:** A member can process the return of a book that was borrowed by a different member
 
 **Environment:**
 - Browser: Edge 148.0.3967.70
@@ -359,7 +341,7 @@
 
 ---
 
-## BUG-10
+## BUG-10: The system doesn't return records when searching by member ID in lowercase letters
 
 | Attribute | Detail |
 |---|---|
@@ -370,8 +352,6 @@
 | **Discovered By** | Nguyễn Tuấn Khải |
 | **Date Discovered** | 19/05/2026 |
 | **Status** | Open |
-
-**Title:** The system doesn't return records when searching by member ID in lowercase letters
 
 **Environment:**
 - Browser: Chrome 148.0.7778.168
