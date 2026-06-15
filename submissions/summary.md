@@ -54,6 +54,7 @@
 |---|---|---|---|
 | Equivalence Partitioning (EP) | REQ-01, 02, 03, 04, 05, 06, 07, 08 | 27 | Inputs were divided into valid/invalid partitions. For each partition (e.g. active / suspended / expired member; valid / malformed email), one representative value was chosen and tested. This efficiently covered all distinct behaviour groups without testing every possible value. |
 | Boundary Value Analysis (BVA) | REQ-04 | 4 | Applied to the 3-book borrow limit: tested at 1 book, 2 books (one below limit), 3 books (at limit), and 4 books (above limit). This revealed that the system incorrectly allows borrowing at 4 books (BUG-07). |
+| Decision Table Testing (DT) | REQ-04, REQ-05 | 9 | Created a decision table for borrow and return flows, mapping combinations of conditions (e.g., member status, book availability, return timing) to expected outcomes. This systematic approach identified gaps such as the missing overdue warning (BUG-05) and the lack of member-specific return validation (BUG-09). |
 
 ---
 

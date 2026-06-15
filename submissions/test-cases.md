@@ -30,27 +30,47 @@
 | Can user trigger search by pressing Enter? | Yes — Enter key works | Type keyword, press Enter | Search executes immediately |
 | | No — must click button manually | Type keyword, press Enter | Nothing happens (Bug: requires manual button click) |
 
-### IDM — Borrow Book (REQ-04)
+### IDM & Decision Table - Borrow Book (REQ-04)
+
+| Conditions / Actions | R1 | R2 | R3 | R4 | R5 | R6 |
+|----------------------|----|----|----|----|----|----|
+| **Conditions** | | | | | | |
+| C1: Book status is "Available"? | True | False (Borrowed) | False (Lost) | True | True | True |
+| C2: Account status is "Active"? | True | True | True | False (Suspended) | False (Expired) | True |
+| C3: Number of books borrowed < 3? | True | - | - | - | - | False |
+| **Actions** | | | | | | |
+| A1: Allow borrow successfully | X | | | | | |
+| A2: Reject — book already borrowed | | X | | | | |
+| A3: Reject — book lost | | | X | | | |
+| A4: Reject — suspended member | | | | X | | |
+| A5: Reject — expired member | | | | | X | |
+| A6: Reject — limit exceeded | | | | | | X |
+
+**For other attributes**
 
 | Characteristic | Block | Representative Value | Expected Result |
-|---|---|---|---|
-| Member status? | Active | MEM002 | Borrowing allowed |
-| | Suspended | MEM004 | Rejected: "Member is suspended" |
-| | Expired | MEM005 | Rejected: message distinct from "suspended" |
-| Number of books currently borrowed? (BVA) | 2 (one below SRS limit of 3) | MEM with 2 books | Allowed; member now has 3 |
-| | 3 (at SRS limit) | MEM with 3 books | Rejected: borrow limit reached |
-| | 4 (actual system limit — Bug) | MEM with 4 books | Should reject; system currently allows |
-| Book availability? | Available | BOOK001 | Borrow allowed |
-| | Already borrowed | BOOK003 | Rejected |
+|---------------|--------|---------------------|----------------|
+| Book status | Available | `BOOK001` | Allow borrow |
+|  | Borrowed | `BOOK003` | Reject, show book unavailable error |
+|  | Lost | `BOOK007` | Reject, show book lost error |
+| Member status | Active | `MEM002` | Allow borrow |
+|  | Suspended | `MEM004` | Reject, show suspended account error |
+|  | Expired | `MEM005` | Reject, show expired account error |
+| Number of books borrowed (BVA) | < 3 (BVA: 0, 1, 2) | `MEM003` (0 books) / `MEM002` (1 book) | Allow borrow |
+|  | = 3 (BVA: limit) | `MEM002` after borrowing 2 more books | Reject, show limit exceeded message |
+|  | > 3 (BVA: above limit) | Attempting a 4th borrow | Reject, show limit exceeded message |
 
-### IDM — Return Book (REQ-05)
+### IDM & Decision Table - Return Book (REQ-05)
 
-| Characteristic | Block | Representative Value | Expected Result |
-|---|---|---|---|
-| Is return on time? | On time | Return on or before due date | Accepted, no warning |
-| | Overdue | Return after due date | Accepted WITH visible overdue warning |
-| Does the book belong to the logged-in member? | Yes | Own borrowed book | Return accepted |
-| | No — another member's book | Different member's book ID | Rejected: "This book does not belong to your account" |
+| Conditions / Actions | R1 | R2 | R3 | R4 |
+|----------------------|----|----|----|----|
+| **Conditions** | | | | |
+| C1: Book Belonging is Borrower? | True | True | True | False (non-borrower) |
+| C2: returnDate < dueDate? | True | False (returnDate = dueDate) | False (returnDate > dueDate) | - |
+| **Actions** | | | | |
+| A1: Accept (no warning) | X | | | |
+| A2: Accept (warning) | | X (return late) | X (return late) | |
+| A3: Reject (reason) | | | | X (not borrow by this member) |
 
 ### IDM — Member Data Access (REQ-06)
 
@@ -103,22 +123,22 @@
 
 | TC ID | Test Objective | Precondition | Steps | Input Data | Expected Result | Technique |
 |---|---|---|---|---|---|---|
-| TC-13 | Borrow book as an active member | MEM003 active, BOOK001 available | 1. Navigate to Borrow / Return.<br>2. Borrow BOOK001.<br>3. Confirm. | BOOK001 / MEM003 | Borrow recorded successfully. | EP |
-| TC-14 | Borrow rejected for suspended member | MEM004 suspended | 1. Borrow available book for MEM004.<br>2. Confirm. | MEM004 | Borrow rejected with suspension message. | EP |
+| TC-13 | Borrow book as an active member | MEM003 active, BOOK001 available | 1. Navigate to Borrow / Return.<br>2. Borrow BOOK001.<br>3. Confirm. | BOOK001 / MEM003 | Borrow recorded successfully. | EP, DT |
+| TC-14 | Borrow rejected for suspended member | MEM004 suspended | 1. Borrow available book for MEM004.<br>2. Confirm. | MEM004 | Borrow rejected with suspension message. | EP, DT |
 | TC-15 | Borrow rejected for expired member | MEM005 expired | 1. Borrow available book for MEM005.<br>2. Confirm. | MEM005 | Borrow rejected with expiry message. | EP |
 | TC-16 | BVA: borrow allowed when member has 1 book | Member currently has 1 book | 1. Borrow another book.<br>2. Confirm. | 1 borrowed book | Borrow allowed. Member now has 2 books. | BVA |
 | TC-17 | Borrow allowed when member has 2 books | Member currently has 2 books | 1. Borrow another book.<br>2. Confirm. | 2 borrowed books | Borrow allowed. Member now has 3 books. | BVA |
-| TC-18 | Borrow rejected when member has 3 books | Member currently has 3 books | 1. Borrow another book.<br>2. Confirm. | 3 borrowed books | Borrow rejected. Limit reached. | BVA |
-| TC-19 | Borrow rejected when member has 4 books | Member currently has 4 books | 1. Borrow another book.<br>2. Confirm. | 4 borrowed books | Borrow rejected. | BVA |
-| TC-20 | Borrow rejected for unavailable book | BOOK003 already borrowed | 1. Search BOOK003. | BOOK003 | Borrow button hidden. | EP |
+| TC-18 | Borrow rejected when member has 3 books | Member currently has 3 books | 1. Borrow another book.<br>2. Confirm. | 3 borrowed books | Borrow rejected. Limit reached. | BVA, DT |
+| TC-19 | Borrow rejected when member has 4 books | Member currently has 4 books | 1. Borrow another book.<br>2. Confirm. | 4 borrowed books | Borrow rejected. | BVA, DT |
+| TC-20 | Borrow rejected for unavailable book | BOOK003 already borrowed | 1. Search BOOK003. | BOOK003 | Borrow button hidden. | EP, DT |
 
 ## REQ-05: Return Book
 
 | TC ID | Test Objective | Precondition | Steps | Input Data | Expected Result | Technique |
 |---|---|---|---|---|---|---|
-| TC-21 | Return book on time | Due date not passed | 1. Return book.<br>2. Confirm. | On-time return | Book returned successfully. No overdue warning. | EP |
-| TC-22 | Return book late | Due date passed | 1. Return book.<br>2. Confirm. | Late return | Overdue warning displayed. | EP |
-| TC-23 | Member cannot return another member's book | BOOK005 borrowed by MEM003 | 1. Attempt return as MEM002.<br>2. Confirm. | BOOK005 | Return rejected. | EP |
+| TC-21 | Return book on time | Due date not passed | 1. Return book.<br>2. Confirm. | On-time return | Book returned successfully. No overdue warning. | EP, DT |
+| TC-22 | Return book late | Due date passed | 1. Return book.<br>2. Confirm. | Late return | Overdue warning displayed. | EP, DT |
+| TC-23 | Member cannot return another member's book | BOOK005 borrowed by MEM003 | 1. Attempt return as MEM002.<br>2. Confirm. | BOOK005 | Return rejected. | EP, DT |
 
 ## REQ-06: Borrow Records & Access Control
 
@@ -151,9 +171,9 @@
 | Book List / Real-time Status | 1 (TC-06) | REQ-02 | EP |
 | Book Information | 1 (TC-31) | REQ-02 | EP |
 | Searching & Filtering | 6 (TC-07 to TC-12) | REQ-03 | EP |
-| Borrow Book | 8 (TC-13 to TC-20) | REQ-04 | EP, BVA |
-| Return Book | 3 (TC-21 to TC-23) | REQ-05 | EP |
+| Borrow Book | 8 (TC-13 to TC-20) | REQ-04 | EP, BVA, DT |
+| Return Book | 3 (TC-21 to TC-23) | REQ-05 | EP, DT |
 | Overdue Check & Access | 2 (TC-24, TC-25) | REQ-06 | EP |
 | Member Registration | 4 (TC-26 to TC-29) | REQ-07 | EP |
 | Access Control | 1 (TC-30) | REQ-08 | EP |
-| **Total**: **31** | REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, REQ-09 | EP + BVA |
+| **Total**: **31** | REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08 | EP + BVA + DT |
